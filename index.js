@@ -131,7 +131,7 @@ const addEmployee = () => {
           console.log(err)
         } else {
           console.log(`${newEmp.first_name} ${newEmp.last_name} has been added!`)
-          init()
+          menu()
         }
       })
     })
