@@ -4,7 +4,8 @@ require('console.table')
 
 const db = createConnection('mysql://root:rootroot@localhost/companyEmployees_db')
 
-const init = () => {
+// function to prompt menu
+const menu = () => {
   prompt([
     {
       type: 'list',
@@ -41,6 +42,7 @@ const init = () => {
     .catch(err => console.log(err))
 }
 
+// function to add departments
 const addDepartment = () => {
   prompt([
     {
@@ -55,13 +57,14 @@ const addDepartment = () => {
           console.log(err)
         } else {
           console.log(`${newDep.name} department has been added!`)
-          init()
+          menu()
         }
       })
     })
     .catch(err => console.log(err))
 }
 
+// function to add roles
 const addRole = () => {
   prompt([
     {
@@ -86,13 +89,14 @@ const addRole = () => {
           console.log(err)
         } else {
           console.log(`${newRole.title} role has been added!`)
-          init()
+          menu()
         }
       })
     })
     .catch(err => console.log(err))
 }
 
+// function to add employees
 const addEmployee = () => {
   prompt([
     {
@@ -134,27 +138,31 @@ const addEmployee = () => {
     .catch(err => console.log(err))
 }
 
+// function to view departments
 const viewDepartments = () => {
   db.query('SELECT department.id, department.name as department FROM department', (err, department) => {
     console.table(department)
-    init()
+    menu()
   })
 }
 
+// function to view roles
 const viewRoles = () => {
   db.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department ON role.department_id = department.id', (err, role) => {
     console.table(role)
-    init()
+    menu()
   })
 }
 
+// function to view employees
 const viewEmployees = () => {
   db.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN department ON role.department_id = department.id LEFT JOIN employee manager ON manager.id = employee.manager_id", (err, employee) => {
     console.table(employee)
-    init()
+    menu()
   })
 }
 
+// function to update employee's role and manager
 const updateEmployee = () => {
   db.query('SELECT * FROM role', (err, role) => {
     db.query('SELECT * FROM employee', (err, employee) => {
@@ -198,7 +206,7 @@ const updateEmployee = () => {
               console.log(err)
             } else {
               console.log('Employee has been updated!')
-              init()
+              menu()
             }
           })
         })
@@ -207,4 +215,4 @@ const updateEmployee = () => {
   })
 }
 
-init()
+menu()
